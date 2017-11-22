@@ -25,10 +25,10 @@ class Breadcrumbs
      *
      * @return array
      */
-    public function get()
+    public function get($useParent=false)
     {
         if (!$this->breadcrumbs) {
-            $this->build();
+            $this->build($useParent);
         }
         return $this->breadcrumbs;
     }
@@ -38,11 +38,15 @@ class Breadcrumbs
      *
      * @internal
      */
-    protected function build()
+    protected function build($useParent)
     {
         $hierarchy = array();
         $grav = Grav::instance();
         $current = $grav['page'];
+        
+        if($useParent){
+            $current = $current->parent();   
+        }
 
         // Page cannot be routed.
         if (!$current) {
